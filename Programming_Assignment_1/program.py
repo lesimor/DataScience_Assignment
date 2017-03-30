@@ -1,7 +1,7 @@
 # encoding: utf-8
 # 우선 값을 읽어서 빈도수를 체크
 # 파일을 읽기위해 연다.
-import calculate
+import set_module
 import sys
 
 # minimal_support(%)
@@ -36,7 +36,7 @@ for line in f:
 
 # prune by minimal support
 print "1 step proceeding..."
-result = [s for s in frequency_table if calculate.set_stat(f, s)["support"] >= minimal_support]
+result = [s for s in frequency_table if set_module.set_stat(f, s)["support"] >= minimal_support]
 
 # temporary saving space
 result_save = []
@@ -45,8 +45,8 @@ result_save = []
 step = 2
 
 # join and prune until further progress is no longer proceeding.
-while calculate.join_and_prune(f, result, minimal_support, step):
-    result = calculate.join_and_prune(f, result, minimal_support, step)
+while set_module.join_and_prune(f, result, minimal_support, step):
+    result = set_module.join_and_prune(f, result, minimal_support, step)
     if not result:
         break
     print str(step)+" step proceeding..."
@@ -59,15 +59,15 @@ output_file = open(output_file, 'w')
 # result set
 for s in result_save:
     # generate all subsets
-    subsets = calculate.generate_all_subsets(s)
+    subsets = set_module.generate_all_subsets(s)
 
     # generate combination of subsets and calculate support and confidence of them
     for subset in subsets:
-        combinations = calculate.generate_item_associative(subset)
+        combinations = set_module.generate_item_associative(subset)
 
         # file write after each combinations
         for item_associative in combinations:
-            r = calculate.associative_set_stat(f, item_associative[0], item_associative[1])
+            r = set_module.associative_set_stat(f, item_associative[0], item_associative[1])
             print_line = '%10s\t%10s\t%.1f\t%.1f\n' % ("{"+",".join(map(str, list(item_associative[0]))) + "}",
                                                        "{"+",".join(map(str, list(item_associative[1]))) + "}",
                                                        r["support"],

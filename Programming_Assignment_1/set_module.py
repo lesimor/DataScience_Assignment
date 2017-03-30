@@ -1,6 +1,6 @@
 # encoding: utf-8
-import calculate
 import itertools
+import set_module
 
 
 # get statistic information of set in file
@@ -49,7 +49,7 @@ def join_and_prune(_file, set_list, min_sup, step):
             union_set = s.union(set_list[x])
 
             # add on result only if length of union set is equal to step and support of union set is higher than min_sup
-            if len(union_set) == step and calculate.set_stat(_file,
+            if len(union_set) == step and set_module.set_stat(_file,
                                                              union_set)[
                 "support"] >= min_sup and union_set not in result_set_list:
                 result_set_list.append(union_set)
