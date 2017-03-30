@@ -2,16 +2,15 @@
 # 우선 값을 읽어서 빈도수를 체크
 # 파일을 읽기위해 연다.
 import calculate
-from set import Set
 
-f = open('./small_input.txt')
+f = open('./input.txt')
 f.readline()
 
 # set의 집합
 frequency_table = []
 
 # 입력받은 support
-minimal_support = 3
+minimal_support = 50
 
 for line in f:
     # 모든 경우의 수를 산출
@@ -23,17 +22,6 @@ for line in f:
 # minimal support에 미치지 못하는 값은 삭제
 
 l_1 = [s for s in frequency_table if calculate.set_stat(f, s)["frequency"] >= minimal_support]
-# print "l_1"
-# print l_1
-# # join수행
-# l_2 = []
-# for index, s in enumerate(l_1):
-#     for x in range(index + 1, len(l_1)):
-#         union_set = s.union(l_1[x])
-#         if len(union_set) == 2 and calculate.get_frequency(f, union_set) >= minimal_support:
-#             l_2.append(union_set)
-# print "l_2"
-# print l_2
 result = l_1
 result_save = []
 step = 2
@@ -50,10 +38,22 @@ print result_save
 # 검증
 output_file = open("output.txt", 'w')
 for s in result_save:
-    st = calculate.set_stat(f, s)["frequency"]
-    output_file.write(str(st))
+    subsets = calculate.generate_all_subsets(s)
+    for subset in subsets:
+        combinations = calculate.generate_item_associative(subset)
+        for item_associative in combinations:
+            r = calculate.associative_set_stat(f, item_associative[0], item_associative[1])
+            print_line = '{%s}\t{%s}\t%.1f\t%.1f\n' % (",".join(map(str, list(item_associative[0]))),
+                                                       ",".join(map(str, list(item_associative[1]))),
+                                                       r["support"] * 100,
+                                                       r["confidence"] * 100)
+            output_file.write(print_line)
 
-print calculate.get_confidence(f, set([1, 2]), set([11]))
+print calculate.associative_set_stat(f, set([1, 2]), set([11]))
+
+print calculate.generate_item_associative(set([1, 2, 3, 4]))
+
+print calculate.generate_all_subsets(set([1, 2, 3, 4, 5]))
 
 f.close()
 
