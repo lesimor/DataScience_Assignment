@@ -33,6 +33,7 @@ for line in f:
             attribute_label_set[attribute_list[idx]] += [value]
     print transaction
 
+
 print attribute_label_set
 print transactions
 
