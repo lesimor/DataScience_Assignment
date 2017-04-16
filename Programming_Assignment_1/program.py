@@ -68,7 +68,7 @@ for s in result_save:
         # file write after each combinations
         for item_associative in combinations:
             r = set_module.associative_set_stat(f, item_associative[0], item_associative[1])
-            print_line = '%10s\t%10s\t%.2f\t%.2f\n' % ("{"+",".join(map(str, list(item_associative[0]))) + "}",
+            print_line = '%10s\t%10s\t%.1f\t%.1f\n' % ("{"+",".join(map(str, list(item_associative[0]))) + "}",
                                                        "{"+",".join(map(str, list(item_associative[1]))) + "}",
                                                        r["support"],
                                                        r["confidence"])
