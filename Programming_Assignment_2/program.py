@@ -38,9 +38,8 @@ for line in f:
 
 # print attribute_label_set
 # print transactions
-attribute_list.remove("Class:buys_computer")
-root_node = classes.Node(attribute_list, None, None, transactions)
-class_attribute = ""
+root_node = classes.Node(attribute_list[:-1], None, None, transactions)
+class_attribute = attribute_list[-1]
 
 
 def generate_successors(node):
@@ -49,14 +48,26 @@ def generate_successors(node):
 
     attr_list = list(node.attribute_list)
 
-    if len(attr_list) == 0 or m.pure_check(node.data, "Class:buys_computer"):
+    if len(attr_list) == 0 or m.pure_check(node.data, class_attribute):
+        leaf_label = m.pure_check(node.data, class_attribute)
+        if not leaf_label:
+            leaf_label = random.choice(attribute_label_set[class_attribute])
+        node.label = leaf_label
         print "-------Leaf 노드입니다.-------"
         print "분류 기준이 " + node.criteria_attribute + "이고 그 값이 " + node.group_value + "인 데이터 노드"
-        for data in node.data:
-            print data
+        # 데이터가 있는 경우와 없는 경우 구분
+        if len(node.data) != 0:
+            for data in node.data:
+                print data
+                print "라벨은 " + leaf_label
+
+        else:
+            print "데이터가 없으므로 랜덤으로 배정합니다."
+            print "라벨은 " + leaf_label
         print "---------------------------"
         return None
     else:
+        # 최적의 attribute값을 찾는 로직 필요.
         selected_attribute = random.choice(attr_list)
         print "남은 분류 기준 " + str(attr_list) + "중에 " + selected_attribute + " 선택!"
         # 해당 attribute의 라벨 종류를 가져온다.
@@ -75,7 +86,9 @@ def generate_successors(node):
     return node
 
 
-print generate_successors(root_node)
+tree = generate_successors(root_node)
+
+
 
 
 print '-----'

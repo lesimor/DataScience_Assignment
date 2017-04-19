@@ -15,3 +15,5 @@ def pure_check(data, attr):
         return value
     else:
         return None
+
+
