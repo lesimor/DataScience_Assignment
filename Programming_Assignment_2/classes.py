@@ -11,6 +11,7 @@ class Node:
         self.data = data                    # 분할 기준에 따라 묶인 데이터들.
         self.label = None                   # 최종 클래스 라벨, non-terminal인 경우 None값.
         self.children = {}
+        self.classifying_attribute = None
 
     def generate_successors(self):
         # 더이상 나눌 기준이 없다면 중단.
@@ -20,6 +21,8 @@ class Node:
 
         self.attribute_list.remove(selected_attribute)
 
-
         return 0
+
+    def set_current_node_criteria(self, attr):
+        self.classifying_attribute = attr
 

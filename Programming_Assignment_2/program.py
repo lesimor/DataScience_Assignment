@@ -68,7 +68,12 @@ def generate_successors(node):
         return None
     else:
         # 최적의 attribute값을 찾는 로직 필요.
-        selected_attribute = random.choice(attr_list)
+        selected_attribute = m.information_gain(node.data, attr_list, class_attribute)
+        # selected_attribute = random.choice(attr_list)
+
+        # 현재 노드의 분류 기준 세팅
+        node.set_current_node_criteria(selected_attribute)
+        print "노드 분류 기준 " + node.classifying_attribute
         print "남은 분류 기준 " + str(attr_list) + "중에 " + selected_attribute + " 선택!"
         # 해당 attribute의 라벨 종류를 가져온다.
         labels_of_selected_attribute = attribute_label_set[selected_attribute]
