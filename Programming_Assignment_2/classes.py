@@ -13,15 +13,16 @@ class Node:
         self.children = {}
         self.classifying_attribute = None
 
-    def generate_successors(self):
-        # 더이상 나눌 기준이 없다면 중단.
-        if len(self.attribute_list):
-            return None
-        selected_attribute = random.choice(self.attribute_list)
+    def following_node(self, datum):
+        pointing_node = self
 
-        self.attribute_list.remove(selected_attribute)
+        while(pointing_node.label == None):
+            current_criteria = pointing_node.classifying_attribute
+            value = datum[current_criteria]
+            pointing_node = pointing_node.children[value]
 
-        return 0
+        return pointing_node.label
+
 
     def set_current_node_criteria(self, attr):
         self.classifying_attribute = attr
