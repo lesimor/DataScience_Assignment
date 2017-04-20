@@ -1,1 +1,6 @@
-buying	maint	doors	persons	lug_boot	safety	car_evaluation
+age	income	student	credit_rating	Class:buys_computer
+fair	<=30	no	low	no
+fair	<=30	yes	medium	yes
+fair	31...40	no	low	yes
+fair	>40	no	high	yes
+excellent	>40	yes	low	no

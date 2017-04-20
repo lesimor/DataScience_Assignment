@@ -62,7 +62,7 @@ def info_gain(data, attr, class_attr):
     return class_info - attr_info
 
 
-def information_gain(data, attr_list, class_attr):
+def splitting_criteria_decision(data, attr_list, class_attr):
     attr_list.sort(key=lambda x: info_gain(data, x, class_attr), reverse=True)
     return attr_list[0]
 

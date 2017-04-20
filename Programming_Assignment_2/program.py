@@ -4,7 +4,7 @@ import classes
 import random
 import modules as m
 
-input_file = "dt_train1.txt"
+input_file = sys.argv[1]
 # file open and read
 f = open(input_file)
 
@@ -66,7 +66,7 @@ def generate_successors(node):
         return node
     else:
         # 최적의 attribute값을 찾는 로직 필요.
-        selected_attribute = m.information_gain(node.data, attr_list, class_attribute)
+        selected_attribute = m.splitting_criteria_decision(node.data, attr_list, class_attribute)
         # selected_attribute = random.choice(attr_list)
 
         # 현재 노드의 분류 기준 세팅
@@ -94,9 +94,9 @@ tree = generate_successors(root_node)
 
 f.close()
 
-test_file = "dt_test1.txt"
+test_file = sys.argv[2]
 # # open file for writing
-output_file_name = test_file.replace("test", "result")
+output_file_name = sys.argv[3]
 output_file = open(output_file_name, 'w')
 
 f = open(test_file)
