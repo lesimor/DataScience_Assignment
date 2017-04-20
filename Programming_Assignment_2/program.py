@@ -38,13 +38,12 @@ for line in f:
 
 # print attribute_label_set
 # print transactions
-root_node = classes.Node(attribute_list[:-1], None, None, transactions)
+root_node = classes.Node(attribute_list[:-1], None, transactions)
 class_attribute = attribute_list[-1]
 
 
 def generate_successors(node):
     print "\n\n\n"
-    print "그룹 값이 " + str(node.group_value) + "인 노드가 generate_successors 호출"
 
     attr_list = list(node.attribute_list)
 
@@ -54,7 +53,6 @@ def generate_successors(node):
             leaf_label = random.choice(attribute_label_set[class_attribute])
         print "-------Leaf 노드입니다.-------"
         node.label = leaf_label
-        print "분류 기준이 " + node.criteria_attribute + "이고 그 값이 " + node.group_value + "인 데이터 노드"
         # 데이터가 있는 경우와 없는 경우 구분
         if len(node.data) != 0:
             for data in node.data:
@@ -83,7 +81,7 @@ def generate_successors(node):
 
         for label in labels_of_selected_attribute:
             data = m.filter(node.data, selected_attribute, label)
-            new_node = classes.Node(attr_list, selected_attribute, label, data)
+            new_node = classes.Node(attr_list, selected_attribute, data)
             print "분류 기준이 " + selected_attribute + "이고 그 값이 " + label + "인 데이터 노드 생성"
             if generate_successors(new_node):
                 node.children[label] = new_node
