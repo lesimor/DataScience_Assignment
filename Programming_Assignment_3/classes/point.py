@@ -2,7 +2,10 @@ from .label import Label
 
 
 class Point:
-    def __init__(self, _x, _y):
+    def __init__(self,_id, _x, _y):
+        # object id
+        self.id = _id
+
         # x position
         self.x = float(_x)
 
