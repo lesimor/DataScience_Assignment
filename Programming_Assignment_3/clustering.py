@@ -1,24 +1,30 @@
 # -*- encoding: utf-8 -*-
 from classes.point import Point
-from classes.cluster import Cluster
-from classes.label import Label
-import sys  # 프로그램 실행 시 인자를 전달받기 위함
+from modules.db_scan import db_scan
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
-
 import matplotlib.cm as cm
 
+# file name
 input_file_name = sys.argv[1]
+
+# number of cluster
 cluster_number = int(sys.argv[2])
-eps_number = int(sys.argv[3])
+
+# eps
+eps_number = float(sys.argv[3])
+
+# minPts
 minPts_number = int(sys.argv[4])
 
-print(input_file_name, cluster_number, eps_number, minPts_number)
-
+# file open by file name input
 f = open("./data/" + input_file_name)
 
+# point_set initialize
 point_set = []
 
+# get object information from file
 for line in f:
     point_info = f.readline().split()
     _id, _x, _y = point_info[0], point_info[1], point_info[2]
@@ -27,53 +33,46 @@ for line in f:
 # file close
 f.close()
 
-print(len(point_set))
-# x축 위치 기준으로 정렬.
-point_set.sort(key=lambda p: p.x)
+cluster_set = db_scan(point_set, eps_number, minPts_number)
 
-# for point in point_set:
-#     print(point.x)
+# sort by element(cluster)'s point_set length ascend
+cluster_set.sort(key=lambda x: len(x.point_set))
+# remove element
+del cluster_set[:-cluster_number]
 
-eps = eps_number
-minPts = minPts_number
-
-
-def db_scan(dataset, eps, minPts):
-    cluster_set = []
-    for point in dataset:
-        if point.label == Label.VISITED:
-            continue
-        # point.label = Label.VISITED
-        neighbor_points = point.region_query(dataset, eps)
-        if len(neighbor_points) < minPts:
-            point.label = Label.NOISE
-        else:
-            # 새로운 클러스터 생성.
-            c = Cluster()
-            c.expand(neighbor_points, dataset, eps, minPts)
-            cluster_set.append(c)
-    return cluster_set
-
-
-cluster_set = db_scan(point_set, eps, minPts)
-
+# using matplotlib for visualizing
 colors = cm.rainbow(np.linspace(0, 1, len(cluster_set)))
 
+# cluster index initialize
 cluster_idx = 0
 for cluster, c in zip(cluster_set, colors):
     x_array = []
     y_array = []
+
+    # output file name setting
     output_file_name = "./data/" + input_file_name.split(".")[0] + "_cluster_" + str(cluster_idx) + ".txt"
-    print(output_file_name + "생성")
+
+    # output file open with name
     output_file = open(output_file_name, 'w')
+
+    # iterate on cluster's point_set
     for point in cluster.point_set:
         x_array.append(point.x)
         y_array.append(point.y)
+
+        # print cluster point set element's id on file
         output_file.write(str(point.id) + "\n")
 
+    # convert normal array to numpy array
     x_numpy = np.array(x_array)
     y_numpy = np.array(y_array)
+
+    # print dot on scatter chart
     plt.scatter(x_numpy, y_numpy, color=c)
+
+    # increment cluster index
     cluster_idx += 1
+
+# show scatter chart
 plt.show()
 
